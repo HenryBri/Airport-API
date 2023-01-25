@@ -4,6 +4,10 @@ const port = process.env.APP_PORT
 const swaggerUi = require('swagger-ui-express')
 const swaggerDocument = require('./docs/swagger.json');
 
+app.get('/airports', (req, res) => {
+    res.send(["Arlanda","Heathrow"])
+})
+
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 

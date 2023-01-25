@@ -8,4 +8,5 @@
 2. Install package files (run command: npm i)
 3. Rename example file ".env.example" to .".env"
 4. Insert correct value to ".env"
-4. Lunch with node . via PowerShell
+5. Lunch with node . via PowerShell
+6. Open browser at given address
