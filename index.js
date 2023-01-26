@@ -20,6 +20,7 @@ require("./routes/app_routes")(app)
 //     }
 // })
 
-app.listen(port, () => {
+app.listen(port, async () => {
+    await require("./db").sync()
     console.log(`API up at: http://localhost:${port}`)
 })

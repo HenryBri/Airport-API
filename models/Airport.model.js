@@ -8,6 +8,22 @@ module.exports = (sequelize, Sequelize) => {
         name: {
             type: Sequelize.STRING,
             allowNull: false
+        },
+        location: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        IATA_code: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        ICAO_code: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        info: {
+            type: Sequelize.STRING(4096),
+            allowNull: false
         }
     })
 

@@ -17,4 +17,9 @@ db.sequelize = Sequelize
 db.sequelize = sequelize
 db.airports = require("./models/Airport.model")(sequelize,Sequelize)
 
-module.exports = db 
+async function sync() {
+    await sequelize.sync({alter:true}) // alter existing table 
+                                        //{force:true} erease and recreate
+}
+
+module.exports = {db, sync}

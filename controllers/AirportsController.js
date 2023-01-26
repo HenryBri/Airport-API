@@ -1,4 +1,4 @@
-const db = require("../db")
+const {db} = require("../db")
 const Airport = db.airports
 
 exports.getAll = async(req, res)=>{
