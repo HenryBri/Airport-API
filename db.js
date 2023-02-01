@@ -16,6 +16,7 @@ const db = {}
 db.sequelize = Sequelize
 db.sequelize = sequelize
 db.airports = require("./models/Airport.model")(sequelize,Sequelize)
+db.flights = require("./models/Flight.model")(sequelize,Sequelize)
 
 async function sync() {
     await sequelize.sync({alter:true}) // alter existing table 
