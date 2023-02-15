@@ -36,8 +36,85 @@
                 },
                 "summary": "Get a list of all airports",
                 "description": "Returs a list of all airports in API"
+            },
+            "post": {
+                "requestBody": {
+                    "description": "A new airport to be created",
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/new-airport"
+                                }
+                            }
+                        },
+                        "description": "New airport"
+                    },
+                    "400": {
+                        "description": "One or all params are missing"
+                    }
+                },
+                "summary": "Add new airport",
+                "description": "Add new airport with all the details"
             }
         },
+        "/airport/{id}": {
+            "get": {
+                "tags": [
+                    "details"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Airport": {
+                                        "value": "{\n    \"id\"=1,\n    \"name\"=Stockholm-Arlanda,\n    \"location\"=Sweden,\n    \"IATA_code\"=ARN,\n    \"ICAO_code\"=ESSA,\n    \"info\"= text\n},\n{\n    \"id\"=2,\n    \"name\"=Tallinn Airport,\n    \"location\"=Estonia,\n    \"IATA_code\"=TLL,\n    \"ICAO_code\"=EETN,\n    \"info\"= text\n},\n{\n    \"id\"=3,\n    \"name\"=Frankfurt Airport,\n    \"location\"=Germany,\n    \"IATA_code\"=FRA,\n    \"ICAO_code\"=EDDF,\n    \"info\"= text\n}\n"
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns airport information"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "Error": "404 - Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport not found in airport array"
+                    }
+                },
+                "operationId": "id-airport",
+                "summary": "Get full details of a airport",
+                "description": "Returns full details of a given id airport"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        }, 
         "/flights":{
             "get": {
                 "tags": [
