@@ -2,17 +2,17 @@ const {db} = require("../db")
 const Flight = db.flights
 
 exports.getAll = async(req, res)=>{
-    const flights = await Flight.findAll()
+    const flights = await Flight.findAll({attributes:["id","flight_nr"]})
     res.send(flights)
 }
 
 exports.getById = async (req, res) => {
-    const flights = await Flight.findByPk(req.params.id)
-    if (flights === null) {
+    const flight = await Flight.findByPk(req.params.id)
+    if (flight === null) {
       res.status(404).send({ error: "Flight not found" })
       return
     }
-    res.send(flights)
+    res.send(flight)
   }
   
   exports.createNew = async (req, res) => {
@@ -62,7 +62,7 @@ exports.getById = async (req, res) => {
       res.status(500).send({ error: "Something went wrong on our side. Sorry :(" })
       return
     }
-    if (result === 0) {
+    if (result[0] === 0) {
       res.status(404).send({ error: "Flight not found" })
       return
     }

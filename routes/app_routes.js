@@ -16,6 +16,4 @@ module.exports = (app) => {
         .get(flightsController.getById)
         .put(flightsController.updateById)
         .delete(flightsController.deleteById)
-    app.route("/airportFlights")
-        .get(airportFlightsController.getAll)
 }

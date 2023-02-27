@@ -64,62 +64,32 @@
                 "description": "Flight details",
                 "required": [
                     "flight_nr",
-                    "departur_airport",
+                    "departure_airport",
                     "arrival_airport",
                     "info"
                 ],
                 "type": "object",
                 "properties": { 
-                    "id": 
-                    {
+                    "id": {
                         "format": "int32",
-                        "description": "flight id",
                         "type": "integer"
                     },
-                    "flight_nr":
-                    {
-                        "description": "flight number",
-                        "type": "string",
-                        "properties": {
-                            "flight_nr": {
-                                "type": "string"
-                            }
-                        }
+                    "flight_nr": {
+                        "type": "string"
                     },
-                    "departure_airport":
-                    {
-                        "description": "departure_airport",
-                        "type": "string",
-                        "properties": {
-                            "departure_airport": {
-                                "type": "string"
-                            }
-                        }
+                    "departure_airport": {
+                        "type": "string"
                     },
-                    "arrival_airport":
-                    {
-                        "description": "arrival airport",
-                        "type": "string",
-                        "properties": {
-                            "arrival_airport": {
-                                "type": "string"
-                            }
-                        }
+                    "arrival_airport": {
+                        "type": "string"
                     },
-                    "info":
-                    {
-                        "description": "info",
-                        "type": "string",
-                        "properties": {
-                            "info": {
-                                "type": "string"
-                            }
-                        }
+                    "info": {
+                        "type": "string"
                     }
                 },
                 "example": {
                     "flight_nr": "SK999",
-                    "departur_airport": "ARN",
+                    "departure_airport": "ARN",
                     "arrival_airport": "CPH",
                     "info": "text"
                 }
@@ -145,8 +115,14 @@
                                 "examples": {
                                     "List of airports": {
                                         "value": [
-                                            "Stockholm-Arlanda",
-                                            "Tallinn Airport"
+                                            {
+                                                "id": 1,
+                                                "name": "Stockholm-Arlanda"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Tallinn Airport"
+                                            }
                                         ]
                                     }
                                 }
@@ -204,13 +180,30 @@
                                 "examples": {
                                     "Invalid data": {
                                         "value": {
-                                            "error": "Invalid input, missing required parameters."
+                                            "error": ["Invalid input, missing required parameters."]
                                         }
                                     }
                                 }
                             }
                         },
                         "description": "Invalid data supplied"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Internal Server Error"
                     }
                 },
                 "summary": "Add new airport",
@@ -234,7 +227,13 @@
                                 },
                                 "examples": {
                                     "Full details of given airport id": {
-                                        "value": "{\"id\":1,\"name\": \"Stockholm-Arlanda\",\"location\": \"Sweden\",\"IATA_code\": \"ARN\", \"ICAO_code\": \"ESSA\", \"info\": \"text\"}"
+                                        "value": {
+                                            "id":1,
+                                            "name": "Stockholm-Arlanda",
+                                            "location": "Sweden",
+                                            "IATA_code": "ARN", 
+                                            "ICAO_code": "ESSA", 
+                                            "info": "text"}
                                     }
                                 }
                             }
@@ -248,9 +247,9 @@
                                     "$ref": "#/components/schemas/error"
                                 },
                                 "examples": {
-                                    "Airport /w+ was not found": {
+                                    "Airport was not found": {
                                         "value": {
-                                            "error": "Airport \\w+ was not found in airport array."
+                                            "error": "Airport was not found in airport array."
                                         }
                                     }
                                 }
@@ -259,6 +258,7 @@
                         "description": "Airport was not found in airport array."
                     }
                 },
+                "deprecated": false,
                 "operationId": "id",
                 "summary": "Get full details of a airport",
                 "description": "Returns full details of a given airport id"
@@ -296,9 +296,37 @@
                         "description": "Airport was updated"
                     },
                     "404": {
-                        "description": "Not found."
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found\t": {
+                                        "value": {
+                                            "error": "Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport with given id was not found."
                     },
                     "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "description": "Something went wrong on our side. Sorry"
                     }
                 },
@@ -326,6 +354,20 @@
                         "description": "Airport deleted"
                     },
                     "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "description": "Airport not found"
                     },
                     "500": {
@@ -378,8 +420,14 @@
                                 "examples": {
                                     "List of flights": {
                                         "value": [
-                                            "SK996",
-                                            "LH4045"
+                                            {
+                                                "id": 1,
+                                                "flight_nr":"SK996"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "flight_nr":"LH4045"
+                                            }
                                         ]
                                     }
                                 }
@@ -437,13 +485,30 @@
                                 "examples": {
                                     "Invalid data": {
                                         "value": {
-                                            "error": "Invalid input, missing required parameters"
+                                            "error": ["Invalid input, missing required parameters"]
                                         }
                                     }
                                 }
                             }
                         },
                         "description": "Invalid data supplied"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Internal Server Error"
                     }
                 },
                 "summary": "Add new flight",
@@ -467,7 +532,14 @@
                                 },
                                 "examples": {
                                     "Full details of given flight id": {
-                                        "value": "{\"id\":1,\"flight_nr\": \"SK926\",\"departure_airport\": \"ARN\",\"arrival_airport\": \"ORD\",\"info\": \"text\"}"
+                                        "value": 
+                                        {
+                                            "id":1,
+                                            "flight_nr": "SK926",
+                                            "departure_airport": "ARN",
+                                            "arrival_airport": "ORD",
+                                            "info": "text"
+                                        }
                                     }
                                 }
                             }
@@ -483,7 +555,7 @@
                                 "examples": {
                                     "Flight /w+ was not found": {
                                         "value": {
-                                            "error": "Flight \\w+ was not found in flights array."
+                                            "error": "Flight was not found in flights array."
                                         }
                                     }
                                 }
@@ -492,6 +564,7 @@
                         "description": "Flight was not found in flights array."
                     }
                 },
+                "deprecated": false,
                 "operationId": "id",
                 "summary": "Get full details of a flight",
                 "description": "Returns full details of a given flight id"
@@ -529,9 +602,37 @@
                         "description": "Flight was updated"
                     },
                     "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Flight not found\t": {
+                                        "value": {
+                                            "error": "Flight not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "description": "Not found."
                     },
                     "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "description": "Something went wrong on our side. Sorry"
                     }
                 },
@@ -556,9 +657,23 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "Flight deleted"
+                        "description": "Flight with given id was deleted"
                     },
                     "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Flight was not found": {
+                                        "value": {
+                                            "error": "Flight not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
                         "description": "Flight not found"
                     },
                     "500": {

@@ -2,17 +2,17 @@ const {db} = require("../db")
 const Airport = db.airports
 
 exports.getAll = async(req, res)=>{
-    const airports = await Airport.findAll()
+    const airports = await Airport.findAll({attributes:["id","name"]})
     res.send(airports)
 }
 
 exports.getById = async (req, res) => {
-    const airports = await Airport.findByPk(req.params.id)
-    if (airports === null) {
+    const airport = await Airport.findByPk(req.params.id)
+    if (airport === null) {
       res.status(404).send({ error: "Airport not found" })
       return
     }
-    res.send(airports)
+    res.send(airport)
   }
   
   exports.createNew = async (req, res) => {
@@ -62,7 +62,7 @@ exports.getById = async (req, res) => {
       res.status(500).send({ error: "Something went wrong on our side. Sorry :(" })
       return
     }
-    if (result === 0) {
+    if (result[0] === 0) {
       res.status(404).send({ error: "Airport not found" })
       return
     }
