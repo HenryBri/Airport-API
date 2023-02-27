@@ -1,74 +1,713 @@
 {
-  "openapi": "3.0.2",
-  "info": {
-  "title": "Flights API",
-  "description": "### This is a Swagger UI for our Flights API  \n\n### Error handling\nErrors are presented using the HTTP status codes 400-599. The response include a more detailed explanation about the error in the body.\n\n```\n{\n  \"error\": \"Cleartext explanation of the error thatoccurred\"\n}\n```\n\n### Generic API errors\nThese error responses can be returned by any of the described endpoints.\n\n| HTTP status  |  Description |\n|---|---|\n| 400| Bad input parameters or invalid request. More information can be found in the response body.\n| 401| The consumer does not have access to the requested resource or the provided token is not valid.\n| 404| The requested resource can not be found or the user does not have access to the resource.\n| 5XX| A server error has occurred while processing the request."
-  
-  },
-  "paths":{
-      "/airports":{
-          "get": {
-              "tags": [
-                  "airports"
-              ],
-              "responses": {
-                  "200": {
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "type": "string"
-                                  }
-                              },
-                              "examples": {
-                                  "List of airports": {
-                                      "value": [
-                                          "Arlanda",
-                                          "Heathrow"
-                                      ]
-                                  }
-                              }
-                          }
-                      },
-                      "description": "Returns a list of airports"
-                  }
-              },
-              "summary": "Get a list of all airports",
-              "description": "Returs a list of all airports in API"
-          }
-      },
-      "/flights":{
-          "get": {
-              "tags": [
-                  "flights"
-              ],
-              "responses": {
-                  "200": {
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "type": "string"
-                                  }
-                              },
-                              "examples": {
-                                  "List of flights": {
-                                      "value": [
-                                          "SK910",
-                                          "LH355"
-                                      ]
-                                  }
-                              }
-                          }
-                      },
-                      "description": "Returns a list of flights"
-                  }
-              },
-              "summary": "Get a list of all flights",
-              "description": "Returs a list of all flights in API"
-          }
-      }
-  }
+    "openapi": "3.0.2",
+    "info": {
+    "title": "Flights API",
+    "description": "### This is a Swagger UI for our Flights API  \n\n### Error handling\nErrors are presented using the HTTP status codes 400-599. The response include a more detailed explanation about the error in the body.\n\n```\n{\n  \"error\": \"Cleartext explanation of the error thatoccurred\"\n}\n```\n\n### Generic API errors\nThese error responses can be returned by any of the described endpoints.\n\n| HTTP status  |  Description |\n|---|---|\n| 400| Bad input parameters or invalid request. More information can be found in the response body.\n| 401| The consumer does not have access to the requested resource or the provided token is not valid.\n| 404| The requested resource can not be found or the user does not have access to the resource.\n| 5XX| A server error has occurred while processing the request."
+    },
+    "components": {
+        "schemas": {
+            "error": {
+                "title": "Root Type for error",
+                "description": "",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "error": "Error message."
+                }
+            },
+            "Airport": {
+                "title": "Root Type for Airport",
+                "description": "Airport details",
+                "required": [
+                    "name",
+                    "location",
+                    "IATA_code",
+                    "ICAO_code",
+                    "info"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "IATA_code": {
+                        "type": "string"
+                    },
+                    "ICAO_code": {
+                        "type": "string"
+                    },
+                    "info": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "name": "Stockholm-Arlanda",
+                    "location": "Sweden",
+                    "IATA_code": "ARN",
+                    "ICAO_code": "ESSA",
+                    "info": "text"
+                }
+            },
+            "Flight": {
+                "title": "Root Type for Flight",
+                "description": "Flight details",
+                "required": [
+                    "flight_nr",
+                    "departure_airport",
+                    "arrival_airport",
+                    "info"
+                ],
+                "type": "object",
+                "properties": { 
+                    "id": {
+                        "format": "int32",
+                        "type": "integer"
+                    },
+                    "flight_nr": {
+                        "type": "string"
+                    },
+                    "departure_airport": {
+                        "type": "string"
+                    },
+                    "arrival_airport": {
+                        "type": "string"
+                    },
+                    "info": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "flight_nr": "SK999",
+                    "departure_airport": "ARN",
+                    "arrival_airport": "CPH",
+                    "info": "text"
+                }
+            }
+        }
+    },
+    "paths": {
+        "/airports": {
+            "get": {
+                "tags": [
+                    "airports"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "List of airports": {
+                                        "value": [
+                                            {
+                                                "id": 1,
+                                                "name": "Stockholm-Arlanda"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "name": "Tallinn Airport"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "List of airports"
+                    }
+                },
+                "summary": "Get a list of all airports",
+                "description": "Returns a list of all airports in the API"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Airport"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "airports"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "location": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Location of created flight": {
+                                        "value": "https://server:port/airports/{id}"
+                                    }
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Airport"
+                                }
+                            }
+                        },
+                        "description": "Airport added"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters."]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Internal Server Error"
+                    }
+                },
+                "summary": "Add new airport",
+                "description": "Add a new airport with all the details\n"
+            }
+        },
+        "/airports/{id}": {
+            "get": {
+                "tags": [
+                    "airports"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of given airport id": {
+                                        "value": {
+                                            "id":1,
+                                            "name": "Stockholm-Arlanda",
+                                            "location": "Sweden",
+                                            "IATA_code": "ARN", 
+                                            "ICAO_code": "ESSA", 
+                                            "info": "text"}
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns full details of a given airport id"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "Airport was not found in airport array."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport was not found in airport array."
+                    }
+                },
+                "deprecated": false,
+                "operationId": "id",
+                "summary": "Get full details of a airport",
+                "description": "Returns full details of a given airport id"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Airport"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "airports"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Airport"
+                                }
+                            }
+                        },
+                        "description": "Airport was updated"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found\t": {
+                                        "value": {
+                                            "error": "Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport with given id was not found."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong on our side. Sorry"
+                    }
+                },
+                "operationId": "Id",
+                "summary": "Update airport by given Id",
+                "description": "Update chosen airport with given paramaters"
+            },
+            "delete": {
+                "tags": [
+                    "airports"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "Id of the airport to be deleted",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Airport deleted"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "Server issues"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Server issues, please try again"
+                    }
+                },
+                "operationId": "Id",
+                "summary": "Delete airport by given Id"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        },
+        "/flights": {
+            "get": {
+                "tags": [
+                    "flights"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "List of flights": {
+                                        "value": [
+                                            {
+                                                "id": 1,
+                                                "flight_nr":"SK996"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "flight_nr":"LH4045"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Ok message"
+                    }
+                },
+                "summary": "Get a list of all flights",
+                "description": "Returns a list of all flights in API"
+            },
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Flight"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "flights"
+                ],
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "location": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "examples": {
+                                    "Location of created flight": {
+                                        "value": "https://server:port/flights/{id}"
+                                    }
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Flight"
+                                }
+                            }
+                        },
+                        "description": "Flight was added"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters"]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Internal Server Error"
+                    }
+                },
+                "summary": "Add new flight",
+                "description": "Add new flight with all the details\n"
+            }
+        },
+        "/flights/{id}": {
+            "get": {
+                "tags": [
+                    "flights"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of given flight id": {
+                                        "value": 
+                                        {
+                                            "id":1,
+                                            "flight_nr": "SK926",
+                                            "departure_airport": "ARN",
+                                            "arrival_airport": "ORD",
+                                            "info": "text"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns full details of a given flight id"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Flight /w+ was not found": {
+                                        "value": {
+                                            "error": "Flight was not found in flights array."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Flight was not found in flights array."
+                    }
+                },
+                "deprecated": false,
+                "operationId": "id",
+                "summary": "Get full details of a flight",
+                "description": "Returns full details of a given flight id"
+            },
+            "put": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Flight"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "tags": [
+                    "flights"
+                ],
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "location": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Flight"
+                                }
+                            }
+                        },
+                        "description": "Flight was updated"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Flight not found\t": {
+                                        "value": {
+                                            "error": "Flight not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Not found."
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Internal Server Error": {
+                                        "value": {
+                                            "error": "Something went wrong on our side. Sorry :("
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Something went wrong on our side. Sorry"
+                    }
+                },
+                "operationId": "Id",
+                "summary": "Update flight by given Id",
+                "description": "Update chosen flight with given paramaters"
+            },
+            "delete": {
+                "tags": [
+                    "flights"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "Id of the flight to be deleted",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Flight with given id was deleted"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Flight was not found": {
+                                        "value": {
+                                            "error": "Flight not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Flight not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "Server issues"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Server issues, please try again"
+                    }
+                },
+                "operationId": "Id",
+                "summary": "Delete flight by given Id",
+                "description": "Delete given flight by Id"
+            },
+            "parameters": [
+                {
+                    "name": "id",
+                    "schema": {
+                        "type": "integer"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
+        }
+    }
 }
