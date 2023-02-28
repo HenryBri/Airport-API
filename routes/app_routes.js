@@ -1,5 +1,6 @@
 const airportsController = require("../controllers/AirportsController.js")
 const flightsController = require("../controllers/FlightsController.js")
+const airportFlightController = require("../controllers/airportFlightController.js")
 
 module.exports = (app) => {
     app.route("/airports")
@@ -16,4 +17,6 @@ module.exports = (app) => {
         .get(flightsController.getById)
         .put(flightsController.updateById)
         .delete(flightsController.deleteById)
+    app.route("/airportflight")
+        .get(airportFlightController.getAll)
 }
