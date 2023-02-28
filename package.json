@@ -21,7 +21,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mariadb": "^3.0.2",
-    "sequelize": "^6.28.0",
+    "sequelize": "^6.29.0",
     "nodemon": "^2.0.20",
     "swagger-ui-express": "^4.6.0"
   }

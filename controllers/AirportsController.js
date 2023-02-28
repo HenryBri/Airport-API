@@ -1,4 +1,5 @@
 const {db} = require("../db")
+const FlightModel = require("../models/Flight.model")
 const Airport = db.airports
 
 exports.getAll = async(req, res)=>{
@@ -72,6 +73,11 @@ exports.getById = async (req, res) => {
         .json(airport)  
   }
   
+  exports.getFlightsAll = async(req, res)=>{
+    const airports = await Airport.findAll({attributes:["id","name"], include:[FlightModel]})
+    res.send(airports)
+}
+
   getBaseUrl = (request) => {
     return (
       (request.connection && request.connection.encrypted ? "https" : "http") +

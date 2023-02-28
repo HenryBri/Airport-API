@@ -708,6 +708,39 @@
                     "required": true
                 }
             ]
+        },
+        "/airportflight": {
+            "get": {
+                "requestBody": {},
+                "tags": [
+                    "airportflight"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": {
+                                            "name": "Tallinn Airport",
+                                            "flight_nr": "LH2627"
+                                          }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "List of airports and departing/arriving flights"
+                    }
+                },
+                "summary": "Get list of flights from airport",
+                "description": "Get a list of flights that depart or arrive in the given airport"
+            }
         }
     }
 }
