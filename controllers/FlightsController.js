@@ -26,7 +26,7 @@ exports.getById = async (req, res) => {
         console.log("FlightsCreate: ", error)
         res
           .status(500)
-          .send({ error: "Something went wrong on our side. Sorry :(" })
+          .send({ error: "Something went wrong on our side. Sorry" })
       }
       return
     }
@@ -42,7 +42,7 @@ exports.getById = async (req, res) => {
       result = await Flight.destroy({ where: { id: req.params.id } })
     } catch (error) {
       console.log("FlightsDelete: ",error)
-      res.status(500).send({ error: "Something went wrong on our side. Sorry :(" })
+      res.status(500).send({ error: "Something went wrong on our side. Sorry" })
       return
     }
     if (result === 0) {
@@ -59,7 +59,7 @@ exports.getById = async (req, res) => {
       result = await Flight.update(req.body,{ where: { id: req.params.id } })
     } catch (error) {
       console.log("FlightsUpdate: ",error)
-      res.status(500).send({ error: "Something went wrong on our side. Sorry :(" })
+      res.status(500).send({ error: "Something went wrong on our side. Sorry" })
       return
     }
     if (result[0] === 0) {

@@ -9,9 +9,9 @@ AirportFlight.belongsTo(Flight, { foreignKey: 'flightId' })
 
 exports.getAll = async (req, res) => {
     try {
-        const airports = await Airport.findAll();
-        const flights = await Flight.findAll();
-        const airportFlightPromises = [];
+        const airports = await Airport.findAll()
+        const flights = await Flight.findAll()
+        const airportFlightPromises = []
 
         for (const airport of airports) {
             for (const flight of flights) {
@@ -25,12 +25,12 @@ exports.getAll = async (req, res) => {
                             airportId: airport.id,
                             flightId: flight.id
                         }
-                    }));
+                    }))
                 }
             }
         }
 
-        await Promise.all(airportFlightPromises);
+        await Promise.all(airportFlightPromises)
 
         const airportFlights = await AirportFlight.findAll({
             include: { all: true },
@@ -44,12 +44,19 @@ exports.getAll = async (req, res) => {
             }
         })
 
-        res.send(result);
+        res.send(result)
     } catch (error) {
-        console.error(error);
-        res.status(500).send({ message: "An error occurred while retrieving airport flights." });
+        console.error(error)
+        res.status(500).send({ message: "Something went wrong on our side. Sorry" })
     }
 }
+
+getBaseUrl = (request) => {
+    return (
+      (request.connection && request.connection.encrypted ? "https" : "http") +
+      `://${request.headers.host}`
+    )
+  }
 
 
 

@@ -736,6 +736,23 @@
                             }
                         },
                         "description": "List of airports and departing/arriving flights"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "Server issues"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Server issues, please try again"
                     }
                 },
                 "summary": "Get list of flights from airport",
