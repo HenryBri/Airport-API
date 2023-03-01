@@ -51,12 +51,39 @@ exports.getAll = async (req, res) => {
     }
 }
 
+exports.getByName = async (req, res) => {
+    try {
+      const airportName = req.params.name
+      const airport = await Airport.findOne({ where: { name: airportName } })
+      
+      if (!airport) {
+        res.status(404).send({ message: "Airport not found" })
+        return
+      }
+  
+      const airportFlights = await AirportFlight.findAll({
+        include: { model: Flight },
+        where: { airportId: airport.id },
+      })
+  
+      const result = airportFlights.map((af) => ({
+        "name": airportName,
+        "flight_nr": af.flight.flight_nr
+      }))
+  
+      res.send(result)
+    } catch (error) {
+      console.error(error)
+      res.status(500).send({ message: "Something went wrong on our side. Sorry" })
+    }
+  }
+
 getBaseUrl = (request) => {
     return (
       (request.connection && request.connection.encrypted ? "https" : "http") +
       `://${request.headers.host}`
     )
-  }
+}
 
 
 

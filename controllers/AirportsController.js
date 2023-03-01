@@ -15,6 +15,34 @@ exports.getById = async (req, res) => {
     }
     res.send(airport)
   }
+
+  exports.getByIATA_code = async (req, res) => {
+    const airport = await Airport.findOne({
+      where: {
+        IATA_code: req.params.IATA_code
+      },
+      attributes: ["name", "IATA_code", "ICAO_code"]
+    })
+    if (airport === null) {
+      res.status(404).send({ error: "Airport code not found" })
+      return
+    }
+    res.send(airport)
+  }
+
+  exports.getByICAO_code = async (req, res) => {
+    const airport = await Airport.findOne({
+    where: {
+      ICAO_code: req.params.ICAO_code
+    },
+    attributes: ["name", "ICAO_code", "IATA_code"]
+  })
+  if (airport === null) {
+    res.status(404).send({ error: "Airport code not found" })
+    return
+  }
+  res.send(airport)
+  }
   
   exports.createNew = async (req, res) => {
     let airport
