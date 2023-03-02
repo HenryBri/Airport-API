@@ -210,7 +210,7 @@
                 "description": "Add a new airport with all the details\n"
             }
         },
-        "/airports/{id}": {
+        "/airports/id/{id}": {
             "get": {
                 "tags": [
                     "airports"
@@ -294,6 +294,23 @@
                             }
                         },
                         "description": "Airport was updated"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters."]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
                     },
                     "404": {
                         "content": {
@@ -402,6 +419,128 @@
                 }
             ]
         },
+        "/airports/iata/{IATA_code}": {
+            "get": {
+                "tags": [
+                    "IATA to ICAO"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "objectt",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of given airport id": {
+                                        "value": {
+                                            "name": "Stockholm-Arlanda",
+                                            "IATA_code": "ARN", 
+                                            "ICAO_code": "ESSA" 
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns the ICAO code of given IATA code"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "IATA code was not found in airport array."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "IATA code was not found in airport array."
+                    }
+                },
+                "summary": "Get the ICAO code of a airport",
+                "description": "Returns the ICAO code of a given IATA code"
+            },
+            "parameters": [
+                {
+                  "name": "IATA_code",
+                  "in": "path",
+                  "description": "The IATA code of the airport",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ]
+        },
+        "/airports/icao/{ICAO_code}": {
+            "get": {
+                "tags": [
+                    "ICAO to IATA"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "objectt",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "Full details of given airport id": {
+                                        "value": {
+                                            "name": "Stockholm-Arlanda",
+                                            "ICAO_code": "ESSA",
+                                            "IATA_code": "ARN"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Returns the IATA code of given ICAO code"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "ICAO code was not found in airport array."
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "ICAO code was not found in airport array."
+                    }
+                },
+                "summary": "Get the IATA code of a airport",
+                "description": "Returns the IATA code of a given ICAO code"
+            },
+            "parameters": [
+                {
+                  "name": "ICAO_code",
+                  "in": "path",
+                  "description": "The ICAO code of the airport",
+                  "required": true,
+                  "schema": {
+                    "type": "string"
+                  }
+                }
+              ]
+        },        
         "/flights": {
             "get": {
                 "tags": [
@@ -601,6 +740,23 @@
                         },
                         "description": "Flight was updated"
                     },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters."]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
+                    },
                     "404": {
                         "content": {
                             "application/json": {
@@ -713,7 +869,7 @@
             "get": {
                 "requestBody": {},
                 "tags": [
-                    "airportflight"
+                    "Airport flights"
                 ],
                 "responses": {
                     "200": {
@@ -735,7 +891,7 @@
                                 }
                             }
                         },
-                        "description": "List of airports and departing/arriving flights"
+                        "description": "List of airports and departing flights"
                     },
                     "500": {
                         "content": {
@@ -755,9 +911,86 @@
                         "description": "Server issues, please try again"
                     }
                 },
-                "summary": "Get list of flights from airport",
-                "description": "Get a list of flights that depart or arrive in the given airport"
+                "summary": "Get list of all flights from all airport",
+                "description": "Get a list of all departing flights from all airports"
             }
+        },
+        "/airportflight/{name}": {
+            "get": {
+                "requestBody": {},
+                "tags": [
+                    "Airport flights"
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "examples": {
+                                    "example": {
+                                        "value": {
+                                            "name": "Tallinn Airport",
+                                            "flight_nr": "LH2627"
+                                          }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "List of all departing flights"
+                    },
+                    "404": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Airport was not found": {
+                                        "value": {
+                                            "error": "Airport not found"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Airport not found"
+                    },
+                    "500": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "error": {
+                                        "value": {
+                                            "error": "Server issues"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Server issues, please try again"
+                    }
+                },
+                "summary": "Get list of all depating flights from a airport",
+                "description": "Get a list of flights that depart from the given airport"
+            },
+            "parameters": [
+                {
+                    "name": "name",
+                    "schema": {
+                        "type": "string"
+                    },
+                    "in": "path",
+                    "required": true
+                }
+            ]
         }
     }
 }
