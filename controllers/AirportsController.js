@@ -86,20 +86,23 @@ exports.getById = async (req, res) => {
     delete req.body.id
     try {
       result = await Airport.update(req.body,{ where: { id: req.params.id } })
-    } catch (error) {
+      if (result[0] === 0) {
+          res.status(404).send({ error: "Airport not found" })
+          return
+      }
+      const airport = await Airport.findByPk(req.params.id)
+      res.status(200)
+          .location(`${getBaseUrl(req)}/airports/${airport.id}`)
+          .json(airport)
+  } catch (error) {
       console.log("AirportsUpdate: ",error)
+      if (error instanceof db.Sequelize.ValidationError) {
+          res.status(400).send({ error: error.errors.map((item) => item.message) })
+          return
+      }
       res.status(500).send({ error: "Something went wrong on our side. Sorry" })
-      return
-    }
-    if (result[0] === 0) {
-      res.status(404).send({ error: "Airport not found" })
-      return
-    }
-    const airport = await Airport.findByPk(req.params.id)
-    res.status(200)
-        .location(`${getBaseUrl(req)}/airports/${airport.id}`)
-        .json(airport)  
   }
+}
   
   exports.getFlightsAll = async(req, res)=>{
     const airports = await Airport.findAll({attributes:["id","name"], include:[FlightModel]})

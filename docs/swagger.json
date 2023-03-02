@@ -295,6 +295,23 @@
                         },
                         "description": "Airport was updated"
                     },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters."]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
+                    },
                     "404": {
                         "content": {
                             "application/json": {
@@ -722,6 +739,23 @@
                             }
                         },
                         "description": "Flight was updated"
+                    },
+                    "400": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/error"
+                                },
+                                "examples": {
+                                    "Invalid data": {
+                                        "value": {
+                                            "error": ["Invalid input, missing required parameters."]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "description": "Invalid data supplied"
                     },
                     "404": {
                         "content": {

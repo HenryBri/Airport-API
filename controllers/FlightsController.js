@@ -54,22 +54,25 @@ exports.getById = async (req, res) => {
   
   exports.updateById = async (req,res) => {
     let result
-    delete req.body.id
+    delete req.body.id    
     try {
       result = await Flight.update(req.body,{ where: { id: req.params.id } })
+      if (result[0] === 0) {
+          res.status(404).send({ error: "Flight not found" })
+          return
+      }
+      const flight = await Flight.findByPk(req.params.id)
+      res.status(200)
+          .location(`${getBaseUrl(req)}/flights/${flight.id}`)
+          .json(flight)
     } catch (error) {
       console.log("FlightsUpdate: ",error)
+      if (error instanceof db.Sequelize.ValidationError) {
+          res.status(400).send({ error: error.errors.map((item) => item.message) })
+          return
+      }
       res.status(500).send({ error: "Something went wrong on our side. Sorry" })
-      return
-    }
-    if (result[0] === 0) {
-      res.status(404).send({ error: "Flight not found" })
-      return
-    }
-    const flight = await Flight.findByPk(req.params.id)
-    res.status(200)
-        .location(`${getBaseUrl(req)}/flights/${flight.id}`)
-        .json(flight)  
+    }  
   }
   
   getBaseUrl = (request) => {
